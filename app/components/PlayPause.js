@@ -27,11 +27,14 @@ class PlayPause extends React.Component {
     const playOrPause = this.props.isPlaying ? 'pause' : 'play';
     return (<div onClick={this.playPauseClick} styleName={playOrPause} />);
   }
+
 }
+
 PlayPause.propTypes = {
   playingTrackId : React.PropTypes.number,
   isPlaying : React.PropTypes.bool,
-  pause : React.PropTypes.func,
-  play : React.PropTypes.func,
+  onPause : React.PropTypes.func,
+  onPlay : React.PropTypes.func,
+  onPlayTrack : React.PropTypes.func
 }
 export default CSSModules(PlayPause, styles);

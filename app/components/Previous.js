@@ -11,7 +11,7 @@ class Previous extends React.Component {
 
   previousClick(e) {
     e.preventDefault();
-    if (this.props.isPlaying) this.props.onPrevious();
+    this.props.onPrevious();
   }
 
   render() {
@@ -20,6 +20,6 @@ class Previous extends React.Component {
 }
 Previous.propTypes = {
   isPlaying : React.PropTypes.bool,
-  previous : React.PropTypes.func,
+  onPrevious : React.PropTypes.func
 }
 export default CSSModules(Previous, styles);

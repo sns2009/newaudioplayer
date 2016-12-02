@@ -5,36 +5,26 @@ import axios from 'axios';
 
 const initialState = { fetching: false,
   fetched: false,
-  tracks: {},
+  tracks: [],
   isPlaying: false,
+  isLoading: false,
   percent: 0,
   volume: 1,
   duration: 0,
   playingTrackId: null,
-  isTrackMounted: true,
-  isLoading: false,
   currentTime: 0
 };
 
-// function getSongIndex(songs, id) {
-//   return findIndex(songs, (o) => o.id === id);
-// }
-
-// function getAdjacentSong(songs, startIndex, direction) {
-//   let nextIndex = startIndex + direction;
-//   nextIndex = nextIndex < 0 ? songs.length-1 : nextIndex > songs.length-1 ? 0 : nextIndex;
-//   return songs[nextIndex].id;
-// }
 
 function getAudioState(audio) {
-  var audioState = {
+  return {
     isPlaying: !audio.paused,
     percent: audio.currentTime / audio.duration,
     duration: audio.duration,
     volume: audio.volume,
     currentTime: audio.currentTime
   }
-  return audioState;
+
 }
 
 export default function reducer(state = initialState, action) {
@@ -44,7 +34,6 @@ export default function reducer(state = initialState, action) {
 
     case 'TRACKS_RECIEVED': {
       const mapIndexed = R.addIndex(R.map);
-      console.log(action.tracks.tracks);
       const tracks = R.take(playerParams.tracksInPlaylist, mapIndexed((track, id) => {
         return {
           id,

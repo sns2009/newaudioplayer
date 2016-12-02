@@ -30,7 +30,6 @@ class Audioplayer extends React.Component {
       this.handleEnd = this.handleEnd.bind(this);
       this.handleStartLoading = this.handleStartLoading.bind(this);
       this.handleNameUpdate = this.handleNameUpdate.bind(this);
-    
     }
 
   componentDidMount(){
@@ -45,7 +44,6 @@ class Audioplayer extends React.Component {
     this.props.updateVolume(ReactDOM.findDOMNode(this.refs.audio), this.props.store.volume);
     this.props.setTime(ReactDOM.findDOMNode(this.refs.audio));
   }
-
 
   handleTimeupdate() {
     this.props.setTime(ReactDOM.findDOMNode(this.refs.audio));
@@ -67,7 +65,6 @@ class Audioplayer extends React.Component {
     audio.pause();
   }
 
-
   handleNext() {
     const audio = ReactDOM.findDOMNode(this.refs.audio);
     this.props.next(audio);
@@ -77,8 +74,6 @@ class Audioplayer extends React.Component {
     const audio = ReactDOM.findDOMNode(this.refs.audio);
     this.props.previous(audio);
   }
-
-
 
   handleSetVolume(volume) {
     const audio = ReactDOM.findDOMNode(this.refs.audio);
@@ -94,11 +89,7 @@ class Audioplayer extends React.Component {
 
   handleEnd() {
     const audio = ReactDOM.findDOMNode(this.refs.audio);
-    if (this.props.audio.isRepeating) {
-      this.props.next(audio);
-    } else {
-      this.props.pause(audio);
-    }
+    this.props.next(audio);
   }
 
   handleStartLoading(){
@@ -109,15 +100,12 @@ class Audioplayer extends React.Component {
     this.props.setIsLoading(false);
   }
 
-
-
   render() {
     let source;
     const id = this.props.store.playingTrackId;
     if(R.isNil(id)){
       source = '';
     }else{
-      console.log(this.props.store.tracks[id]['url']);
       source = this.props.store.tracks[id]['url'];
 
     }
@@ -135,14 +123,13 @@ class Audioplayer extends React.Component {
                   <Playingnow tracks={this.props.store.tracks}
                               playingTrackId={this.props.store.playingTrackId}
                               isLoading={this.props.store.isLoading} />
-                  <Progressbar isPlaying={this.props.store.isPlaying}
+                  <Progressbar  isPlaying={this.props.store.isPlaying}
                                 percent={this.props.store.percent}
                                 onProgressBar={this.handleProgressBarClick} />
                   <div styleName="track-constrols">
                     <Previous onPrevious={this.handlePrevious}
                               isPlaying={this.props.store.isPlaying} />
-                    <PlayPause  pause={this.props.pause}
-                                onPlay={this.handlePlay}
+                    <PlayPause  onPlay={this.handlePlay}
                                 onPause={this.handlePause}
                                 onPlayTrack={this.handlePlayTrack}
                                 isPlaying={this.props.store.isPlaying}
@@ -151,11 +138,8 @@ class Audioplayer extends React.Component {
                           isPlaying={this.props.store.isPlaying}/>
                     <Volume isPlaying={this.props.store.isPlaying}
                             volume={this.props.store.volume}
-                            volumeBarWidth={this.props.store.volumeBarWidth}
-                            setVolume={this.props.setVolume}
                             onSetVolume={this.handleSetVolume}
-                             />
-                            
+                             />       
                   </div>
                 </div>
                 <Playlist fetching={this.props.store.fetching}
@@ -166,31 +150,39 @@ class Audioplayer extends React.Component {
                           tracksRecieved={this.props.tracksRecieved}
                           fetchTracksError={this.props.fetchTracksError}
                           onPlayTrack={this.handlePlayTrack}
-                          trackMount={this.props.trackMount}
-                          isTrackMounted={this.props.store.isTrackMounted}
+                          onPlay={this.handlePlay}
+                          onPause={this.handlePause}
+                          isPlaying={this.props.store.isPlaying}
                           currentTime={this.props.store.currentTime}
                           />
             </div>);
 
   }
 }
-// Audioplayer.propTypes = {
-//   playingTrackId : React.PropTypes.number,
-//   isPlaying : React.PropTypes.bool,
-//   previous : React.PropTypes.func,
-//   pause : React.PropTypes.func,
-//   play : React.PropTypes.func,
-//   next : React.PropTypes.func,
-//   volume : React.PropTypes.number,
-//   volumeBarWidth : React.PropTypes.number,                 
-//   fetching : React.PropTypes.bool,
-//   fetched : React.PropTypes.bool,
-//   isTrackMounted : React.PropTypes.bool,
-//   startTracksFetch : React.PropTypes.func,
-//   tracksRecieved : React.PropTypes.func,
-//   fetchTracksError : React.PropTypes.func,
-//   playTrack : React.PropTypes.func,
-//   trackMount : React.PropTypes.func,
-//   setVolume : React.PropTypes.func
-// }
+Audioplayer.propTypes = {
+  tracks: React.PropTypes.array,
+  isPlaying : React.PropTypes.bool,
+  isLoading : React.PropTypes.bool,
+  volume : React.PropTypes.number,
+  fetching : React.PropTypes.bool,
+  fetched : React.PropTypes.bool,
+  playingTrackId : React.PropTypes.number,
+  percent:  React.PropTypes.number,
+  volume:  React.PropTypes.number,
+  duration:  React.PropTypes.number,
+  currentTime:  React.PropTypes.number,
+  startTracksFetch : React.PropTypes.func,
+  tracksRecieved : React.PropTypes.func,
+  fetchTracksError : React.PropTypes.func,
+  updateVolume: React.PropTypes.func,
+  setTime: React.PropTypes.func,
+  playTrack: React.PropTypes.func,
+  play: React.PropTypes.func,
+  pause: React.PropTypes.func,
+  next: React.PropTypes.func,
+  previous: React.PropTypes.func,
+  setVolume: React.PropTypes.func,
+  updatePosition: React.PropTypes.func,
+  setIsLoading: React.PropTypes.func
+}
 export default CSSModules(Audioplayer, styles);

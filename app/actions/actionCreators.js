@@ -15,7 +15,7 @@ export function fetchTracksError(error) {
     error,
   };
 }
-export function playTrack(audio,id) {
+export function playTrack(audio, id) {
   return {
     type: 'PLAY_TRACK',
     audio,
@@ -46,38 +46,28 @@ export function previous(audio) {
     audio,
   };
 }
-export function trackMount(isTrackMounted) {
-  return {
-    type: 'TRACK_MOUNT',
-    isTrackMounted,
-  };
-}
 export function updateVolume(volume) {
   return {
     type: 'UPDATE_VOLUME',
     volume,
-
   };
 }
 export function setVolume(audio) {
   return {
     type: 'SET_VOLUME',
     audio,
-
   };
 }
 export function setTime(audio) {
   return {
     type: 'SET_TIME',
     audio,
-
   };
 }
 export function updatePosition(audio) {
   return {
     type: 'UPDATE_POSITION',
     audio,
-
   };
 }
 export function setIsLoading(status) {

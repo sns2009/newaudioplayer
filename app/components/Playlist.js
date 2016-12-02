@@ -13,10 +13,6 @@ class Playlist extends React.Component {
     this.state = { searchValue: '' };
   }
 
-  componentDidMount() {
-
-  }
-
   handleSearch(e) {
     this.setState({
       searchValue: e.target.value,
@@ -32,10 +28,10 @@ class Playlist extends React.Component {
       track={track}
       key={i}
       onPlayTrack={this.props.onPlayTrack}
-      trackMount={this.props.trackMount}
-      isTrackMounted={this.props.isTrackMounted}
+      onPlay={this.props.onPlay}
+      onPause={this.props.onPause}
+      isPlaying={this.props.isPlaying}
       playingTrackId={this.props.playingTrackId}
-      next={this.props.next}
       currentTime={this.props.currentTime}
     />), filteredTracks));
 
@@ -50,14 +46,17 @@ class Playlist extends React.Component {
         }
 }
 Playlist.propTypes = {
-  playingTrackId : React.PropTypes.number,
+  tracks: React.PropTypes.array,
   fetching : React.PropTypes.bool,
   fetched : React.PropTypes.bool,
-  isTrackMounted : React.PropTypes.bool,
+  isPlaying : React.PropTypes.bool,
+  currentTime:  React.PropTypes.number,
+  playingTrackId : React.PropTypes.number,
   startTracksFetch : React.PropTypes.func,
   tracksRecieved : React.PropTypes.func,
   fetchTracksError : React.PropTypes.func,
   onPlayTrack : React.PropTypes.func,
-  trackMount : React.PropTypes.func,
+  onPlay: React.PropTypes.func,
+  onPause: React.PropTypes.func
 }
 export default CSSModules(Playlist, styles);

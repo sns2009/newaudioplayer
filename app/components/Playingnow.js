@@ -11,7 +11,6 @@ class Playingnow extends React.Component {
     this.updateName = this.updateName.bind(this);
   }
 
-
   updateName(artist,track) {
     let artistTrack = `${artist} - ${track}`;
     if (artistTrack.length > playerParams.trackLettersInPlayingnow){
@@ -37,6 +36,8 @@ class Playingnow extends React.Component {
   }
 }
 Playingnow.propTypes = {
-  playingTrackId : React.PropTypes.number,
+  tracks: React.PropTypes.array,
+  isLoading : React.PropTypes.bool,
+  playingTrackId : React.PropTypes.number
 }
 export default CSSModules(Playingnow, styles);

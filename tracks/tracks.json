@@ -9,6 +9,26 @@
     "track_title" : "Enthusiast",
     "track_duration" : "02:51",
     "track_url" : "tracks/Tours_-_01_-_Enthusiast.mp3"
+  },{
+    "artist_name" : "Jahzzar",
+    "track_title" : "Siesta",
+    "track_duration" : "02:19",
+    "track_url" : "tracks/Jahzzar_-_05_-_Siesta.mp3"
+  },{
+    "artist_name" : "Monk Turner +",
+    "track_title" : "It's Your Birthday!",
+    "track_duration" : "00:36",
+    "track_url" : "tracks/Monk_Turner__Fascinoma_-_01_-_Its_Your_Birthday.mp3"
+  },{
+    "artist_name" : "BoxCat Games",
+    "track_title" : "Epic Song",
+    "track_duration" : "00:54",
+    "track_url" : "tracks/BoxCat_Games_-_10_-_Epic_Song.mp3"
+  },{
+    "artist_name" : "The Kyoto",
+    "track_title" : " Hachiko (The Faithtful Dog)",
+    "track_duration" : "03:05",
+    "track_url" : "tracks/The_Kyoto_Connection_-_09_-_Hachiko_The_Faithtful_Dog.mp3"
   }
 
     ]

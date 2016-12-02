@@ -11,8 +11,7 @@ class Next extends React.Component {
 
   nextClick(e) {
     e.preventDefault();
-    console.log(this.props.onNext)
-    if (this.props.isPlaying) this.props.onNext();
+    this.props.onNext();
   }
 
   render() {
@@ -21,6 +20,6 @@ class Next extends React.Component {
 }
 Next.propTypes = {
   isPlaying : React.PropTypes.bool,
-  next : React.PropTypes.func
+  onNext : React.PropTypes.func
 }
 export default CSSModules(Next, styles);
