@@ -11,9 +11,8 @@ class Next extends React.Component {
 
   nextClick(e) {
     e.preventDefault();
-    if (this.props.isPlaying) {
-      this.props.next();
-    }
+    console.log(this.props.onNext)
+    if (this.props.isPlaying) this.props.onNext();
   }
 
   render() {

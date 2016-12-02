@@ -6,7 +6,7 @@ export function startTracksFetch() {
 export function tracksRecieved(tracks) {
   return {
     type: 'TRACKS_RECIEVED',
-    tracks
+    tracks,
   };
 }
 export function fetchTracksError(error) {
@@ -15,30 +15,35 @@ export function fetchTracksError(error) {
     error,
   };
 }
-export function playTrack(id) {
+export function playTrack(audio,id) {
   return {
     type: 'PLAY_TRACK',
+    audio,
     id,
   };
 }
-export function pause() {
+export function pause(audio) {
   return {
     type: 'PAUSE',
+    audio,
   };
 }
-export function play() {
+export function play(audio) {
   return {
     type: 'PLAY',
+    audio,
   };
 }
-export function next() {
+export function next(audio) {
   return {
     type: 'NEXT',
+    audio,
   };
 }
-export function previous() {
+export function previous(audio) {
   return {
     type: 'PREVIOUS',
+    audio,
   };
 }
 export function trackMount(isTrackMounted) {
@@ -47,10 +52,38 @@ export function trackMount(isTrackMounted) {
     isTrackMounted,
   };
 }
-export function setVolume(volume, volumeBarWidth) {
+export function updateVolume(volume) {
   return {
-    type: 'VOLUME',
+    type: 'UPDATE_VOLUME',
     volume,
-    volumeBarWidth,
+
+  };
+}
+export function setVolume(audio) {
+  return {
+    type: 'SET_VOLUME',
+    audio,
+
+  };
+}
+export function setTime(audio) {
+  return {
+    type: 'SET_TIME',
+    audio,
+
+  };
+}
+export function updatePosition(audio) {
+  return {
+    type: 'UPDATE_POSITION',
+    audio,
+
+  };
+}
+export function setIsLoading(status) {
+  return {
+    type: 'SET_IS_LOADING',
+    status,
+
   };
 }

@@ -6,22 +6,39 @@ class Volume extends React.Component {
 
   constructor(){
     super();
+    this.volumeBarWidth = 0;
     this.changeVolume = this.changeVolume.bind(this);
+
+  }
+
+
+  componentDidUpdate(){
+     this.volumeBarWidth = this.volumeBar.getBoundingClientRect().width;
+
   }
 
 
   changeVolume(e){
+
     let volume = +((e.pageX - e.currentTarget.getBoundingClientRect().left) / e.currentTarget.getBoundingClientRect().width);
-    if(this.props.isPlaying) this.props.setVolume(volume,e.currentTarget.getBoundingClientRect().width);
+    if(this.props.isPlaying) this.props.onSetVolume(volume);
   
   }
 
   render() {
-    const barWidth = this.props.volume * this.props.volumeBarWidth;
-    const volumeBarStyle = {width: barWidth, height:'100%', backgroundColor: 'black'};
+
+    const barWidth = this.props.volume * this.volumeBarWidth;
+    const volumeBarStyle = {width: `${barWidth}px`, height:'100%', backgroundColor: 'black'};
+
+    let speaker;
+    if(this.props.volume < 0.5){
+      speaker = 'speaker-medium';
+    } else {
+      speaker = 'speaker-high';
+    }
     return (<div styleName="volume">
-              <div styleName="speaker-high"></div>
-              <div onClick={this.changeVolume} styleName="volume-bar">
+              <div styleName={speaker}></div>
+              <div onClick={this.changeVolume}  ref={(elem) => { this.volumeBar = elem; }} styleName="volume-bar" >
                 <div style={volumeBarStyle}></div>
               </div>
             </div>)

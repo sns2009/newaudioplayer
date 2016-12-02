@@ -14,15 +14,7 @@ class Playlist extends React.Component {
   }
 
   componentDidMount() {
-    const fetched = this.props.fetched;
-    if (!fetched) {
-      this.props.startTracksFetch();
-      axios.get('https://freemusicarchive.org/featured.json').then((response) => {
-        this.props.tracksRecieved(response.data);
-      }).catch((error) => {
-        this.props.fetchTracksError(error);
-      });
-    }
+
   }
 
   handleSearch(e) {
@@ -32,23 +24,26 @@ class Playlist extends React.Component {
   }
 
   render() {
-    const filteredTracks = R.filter(track => (track.artist.toLowerCase().indexOf(this.state.searchValue.toLowerCase()) === 0 ||
-            track.track.toLowerCase().indexOf(this.state.searchValue.toLowerCase()) === 0), this.props.tracks);
+    const filteredTracks = R.filter(
+      track => (track.artist.toLowerCase().indexOf(this.state.searchValue.toLowerCase()) === 0 ||
+            track.track.toLowerCase().indexOf(this.state.searchValue.toLowerCase()) === 0),
+             this.props.tracks);
     let tracksToShow = R.values(R.mapObjIndexed((track, i, obj) => (<Track
       track={track}
       key={i}
-      playTrack={this.props.playTrack}
+      onPlayTrack={this.props.onPlayTrack}
       trackMount={this.props.trackMount}
       isTrackMounted={this.props.isTrackMounted}
       playingTrackId={this.props.playingTrackId}
       next={this.props.next}
+      currentTime={this.props.currentTime}
     />), filteredTracks));
 
     if (this.props.fetching) tracksToShow = (<div styleName="wait">Wait...</div>);
     return (<div styleName="playlist">
               <div styleName="search">
                 <div styleName="search-icon" />
-                <input styleName="search-text" value={this.state.searchValue} onChange={this.handleSearch} type="text" />
+                <input styleName="search-text" value={this.state.searchValue} onInput={this.handleSearch} type="text" />
               </div>
               {tracksToShow}
             </div>);
@@ -62,7 +57,7 @@ Playlist.propTypes = {
   startTracksFetch : React.PropTypes.func,
   tracksRecieved : React.PropTypes.func,
   fetchTracksError : React.PropTypes.func,
-  playTrack : React.PropTypes.func,
+  onPlayTrack : React.PropTypes.func,
   trackMount : React.PropTypes.func,
 }
 export default CSSModules(Playlist, styles);

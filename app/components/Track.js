@@ -9,7 +9,7 @@ class Track extends React.Component {
   constructor() {
     super();
     this.trackClick = this.trackClick.bind(this);
-    this.durationTimeUpdate = this.durationTimeUpdate.bind(this);
+    this.formatTime = this.formatTime.bind(this);
     this.state = {
       isMounted: true,
       time: '00:00',
@@ -18,25 +18,22 @@ class Track extends React.Component {
 
   componentDidMount() {
 
-    this.props.trackMount(true);
   }
 
   componentDidUpdate() {
-    if (!R.isNil(window.playingTrack)) window.playingTrack.addEventListener('timeupdate', this.durationTimeUpdate);
+
   }
 
   trackClick(e) {
     e.preventDefault();
-    this.props.playTrack(this.props.track.id);
-    window.playingTrack.addEventListener('timeupdate', this.durationTimeUpdate);
+    this.props.onPlayTrack(this.props.track.id);
+
   }
 
-  durationTimeUpdate() {
-    let minToShow,
-      secToShow;
-    const min = Math.floor(window.playingTrack.currentTime / 60);
-    const s = parseInt(window.playingTrack.currentTime) - (min * 60);
-
+  formatTime(currentTime) {
+    let minToShow, secToShow;
+    const min = Math.floor(currentTime / 60);
+    const s = parseInt(currentTime) - (min * 60);
 
     if (min < 10) {
       minToShow = `0${min}`;
@@ -50,11 +47,8 @@ class Track extends React.Component {
       secToShow = s;
     }
 
-    if (this.props.isTrackMounted) {
-      this.setState({
-        time: `${minToShow}:${secToShow}`,
-      });
-    }
+    return `${minToShow}:${secToShow}`;
+    
   }
 
 
@@ -63,7 +57,7 @@ class Track extends React.Component {
     let duration = this.props.track.duration;
     if (this.props.playingTrackId === this.props.track.id && (!R.isNil(this.props.playingTrackId)) && this.props.isTrackMounted) {
       trackStyle = 'track-playing';
-      duration = this.state.time;
+      duration = this.formatTime(this.props.currentTime);
     }
     let trackName = `${this.props.track.artist} - ${this.props.track.track}`;
     if (trackName.length > playerParams.trackLettersInPlaylist) trackName = trackName.substr(0, playerParams.trackLettersInPlaylist - 3).concat(' ...');
@@ -74,8 +68,7 @@ class Track extends React.Component {
   }
 
   componentWillUnmount() {
-    this.props.trackMount(false);
-    window.playingTrack.removeEventListener('timeupdate', this.durationTimeUpdate);
+
   }
 }
 Track.propTypes = {

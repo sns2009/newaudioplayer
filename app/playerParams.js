@@ -1,5 +1,5 @@
 const playerParams = {
-  tracksInPlaylist: 6,
+  tracksInPlaylist: 2,
   trackLettersInPlaylist: 35,
   trackLettersInPlayingnow: 28,
 };

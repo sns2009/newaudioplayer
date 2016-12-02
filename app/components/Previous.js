@@ -11,7 +11,7 @@ class Previous extends React.Component {
 
   previousClick(e) {
     e.preventDefault();
-    if (this.props.isPlaying) this.props.previous();
+    if (this.props.isPlaying) this.props.onPrevious();
   }
 
   render() {

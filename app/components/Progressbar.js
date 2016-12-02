@@ -8,39 +8,46 @@ class Progressbar extends React.Component {
 
   constructor() {
     super();
-    this.timelineUpdate = this.timelineUpdate.bind(this);
+    this.progressbarWidth = 0;
+    // this.timelineUpdate = this.timelineUpdate.bind(this);
     this.timelineClick = this.timelineClick.bind(this);
-    this.state = { timelineWidth: 0 };
+    // this.state = { timelineWidth: 0 };
   }
 
-  componentDidUpdate() {
-    if (!R.isNil(window.playingTrack)) window.playingTrack.addEventListener('timeupdate', this.timelineUpdate);
+  componentDidUpdate(){
+     this.progressbarWidth = this.progressbar.getBoundingClientRect().width;
+
   }
 
-
-  timelineUpdate() {
-    const duration = window.playingTrack.duration;
-    const currentTime = window.playingTrack.currentTime;
-    const width = this.progressbar.getBoundingClientRect().width;
-    this.setState({
-      timelineWidth: currentTime * width / duration,
-    });
-  }
 
   timelineClick(e) {
-    if (this.props.isPlaying) {
+    if(this.props.isPlaying) {
       const newTimelineWidth = +(e.pageX - e.currentTarget.getBoundingClientRect().left);
-      const time = window.playingTrack.duration * newTimelineWidth / e.currentTarget.getBoundingClientRect().width;
-      window.playingTrack.currentTime = time;
-      this.setState({
-        timelineWidth: newTimelineWidth,
-      });
+      const percent = newTimelineWidth / this.progressbarWidth;
+      this.props.onProgressBar(percent); 
     }
+
+
+    // if (this.props.isPlaying) {
+    //   const newTimelineWidth = +(e.pageX - e.currentTarget.getBoundingClientRect().left);
+    //   const time = window.playingTrack.duration * newTimelineWidth / e.currentTarget.getBoundingClientRect().width;
+    //   window.playingTrack.currentTime = time;
+    //   this.setState({
+    //     timelineWidth: newTimelineWidth,
+    //   });
+    // }
   }
 
   render() {
+    
+    const progressbarWidth = this.progressbarWidth || 0;
+
+    const timelineWidth = progressbarWidth * this.props.percent;
+
+    console.log(timelineWidth);
+
     const timeline = { height: '100%',
-      width: `${this.state.timelineWidth}px`,
+      width: `${timelineWidth}px`,
       backgroundColor: 'black' };
     return (<div onClick={this.timelineClick} ref={(elem) => { this.progressbar = elem; }}
                  styleName="progressbar">

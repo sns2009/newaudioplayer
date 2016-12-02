@@ -12,12 +12,14 @@ class PlayPause extends React.Component {
 
   playPauseClick(e) {
     e.preventDefault();
-    if (!R.isNil(this.props.playingTrackId)) {
-      if (this.props.isPlaying) {
-        this.props.pause();
-      } else {
-        this.props.play();
+    if(!R.isNil(this.props.playingTrackId)){
+      if(this.props.isPlaying){
+      this.props.onPause();
+      }else{
+      this.props.onPlay();
       }
+    }else{
+    this.props.onPlayTrack();
     }
   }
 

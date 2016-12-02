@@ -1,96 +1,113 @@
 import R from 'ramda';
 import playerParams from '../playerParams';
+import axios from 'axios';
 
-export default function reducer(state = { fetching: false,
+
+const initialState = { fetching: false,
   fetched: false,
   tracks: {},
-  playingTrack: null,
   isPlaying: false,
+  percent: 0,
+  volume: 1,
+  duration: 0,
   playingTrackId: null,
-  volume: 0.5,
-  volumeBarWidth: 100,
   isTrackMounted: true,
-}, action) {
+  isLoading: false,
+  currentTime: 0
+};
+
+// function getSongIndex(songs, id) {
+//   return findIndex(songs, (o) => o.id === id);
+// }
+
+// function getAdjacentSong(songs, startIndex, direction) {
+//   let nextIndex = startIndex + direction;
+//   nextIndex = nextIndex < 0 ? songs.length-1 : nextIndex > songs.length-1 ? 0 : nextIndex;
+//   return songs[nextIndex].id;
+// }
+
+function getAudioState(audio) {
+  var audioState = {
+    isPlaying: !audio.paused,
+    percent: audio.currentTime / audio.duration,
+    duration: audio.duration,
+    volume: audio.volume,
+    currentTime: audio.currentTime
+  }
+  return audioState;
+}
+
+export default function reducer(state = initialState, action) {
   switch (action.type) {
     case 'START_TRACKS_FETCH': {
       return R.merge(state, { fetching: true }); }
 
     case 'TRACKS_RECIEVED': {
       const mapIndexed = R.addIndex(R.map);
-      let durationShort;
+      console.log(action.tracks.tracks);
       const tracks = R.take(playerParams.tracksInPlaylist, mapIndexed((track, id) => {
-        if (track.track_duration.indexOf('00:') === 0) durationShort = track.track_duration.slice(3);
         return {
           id,
           artist: track.artist_name,
           track: track.track_title,
-          duration: durationShort,
-          url: track.track_file_url,
+          duration: track.track_duration,
+          url: track.track_url,
         };
-      }, action.tracks.aTracks));
+      }, action.tracks.tracks));
       return R.merge(state, { tracks, fetching: false }); }
 
     case 'FETCH_TRACKS_ERROR': {
       return R.merge(state, { tracks, fetching: false }); }
 
-    case 'PLAY_TRACK': {
-      let playingTrack = state.playingTrack;
-      if (!R.isNil(playingTrack)) playingTrack.pause();
-      playingTrack = new Audio(state.tracks[action.id].url);
-      window.playingTrack = playingTrack;
-      playingTrack.play();
-      playingTrack.volume = state.volume;
-      return R.merge(state, { playingTrack, isPlaying: true, playingTrackId: action.id }); }
+    case 'TRACK_MOUNT': {
+      return R.merge(state, { isTrackMounted: action.isTrackMounted }); }
 
-    case 'PAUSE': {
-      const playingTrack = state.playingTrack;
-      playingTrack.pause();
-      return R.merge(state, { playingTrack, isPlaying: false }); }
+    case 'PLAY_TRACK':{
+      let id = action.id || 0;
+      return R.merge(state, { playingTrackId: id, isPlaying: true }, getAudioState(action.audio)); }
 
-    case 'PLAY': {
-      const playingTrack = state.playingTrack;
-      if (!R.isNil(state.playingTrack)) {
-        playingTrack.play();
-      } else {
-        playingTrack.pause();
-      }
-      return R.merge(state, { playingTrack, isPlaying: true }); }
+    case 'PLAY':{
+      return R.merge(state, {isPlaying: false} );
+    }
+    case 'PAUSE':{
+      return R.merge(state, getAudioState(action.audio) );
+    }
 
     case 'NEXT': {
-      let playingTrack = state.playingTrack;
       const playingTrackId = state.playingTrackId;
       let nextId = playingTrackId + 1;
       if (nextId > (R.length(state.tracks) - 1)) nextId = 0;
-      if (!R.isNil(playingTrack)) {
-        playingTrack = state.playingTrack;
-        playingTrack.pause();
-        playingTrack = new Audio(state.tracks[nextId].url);
-        window.playingTrack = playingTrack;
-        playingTrack.play();
-      }
-      return R.merge(state, { playingTrack, isPlaying: true, playingTrackId: nextId }); }
+      return R.merge(state, {isPlaying: true, playingTrackId: nextId}, getAudioState(action.audio) ); }
 
     case 'PREVIOUS': {
       let playingTrack = state.playingTrack;
       const playingTrackId = state.playingTrackId;
       let previousId = playingTrackId - 1;
-      if (previousId < 0) previousId = R.length(state.tracks) - 1;
-      if (!R.isNil(playingTrack)) {
-        playingTrack = state.playingTrack;
-        playingTrack.pause();
-        playingTrack = new Audio(state.tracks[previousId].url);
-        window.playingTrack = playingTrack;
-        playingTrack.play();
-      }
-      return R.merge(state, { playingTrack, isPlaying: true, playingTrackId: previousId }); }
+      if(previousId < 0) previousId = R.length(state.tracks) - 1;
+      return R.merge(state, {isPlaying: true, playingTrackId: previousId}, getAudioState(action.audio) ); }
 
-    case 'TRACK_MOUNT': {
-      return R.merge(state, { isTrackMounted: action.isTrackMounted }); }
+    case 'UPDATE_VOLUME':{
+      return R.merge(state, {volume: action.volume} );
+    }
 
-    case 'VOLUME': {
-      const playingTrack = state.playingTrack;
-      playingTrack.volume = action.volume;
-      return R.merge(state, { playingTrack, volume: action.volume, volumeBarWidth: action.volumeBarWidth }); }
+    case 'SET_VOLUME':{
+      return R.merge(state, getAudioState(action.audio) );
+    }
+    
+
+    case 'SET_TIME':{
+      return R.merge(state, getAudioState(action.audio) );
+    }
+
+    case 'UPDATE_POSITION':{
+      return R.merge(state, getAudioState(action.audio) );
+    }
+
+    case 'SET_IS_LOADING':{
+      return R.merge(state, {isLoading: action.status} );
+    }
+
+
 
 
     default: return state;
